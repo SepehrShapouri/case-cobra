@@ -88,8 +88,8 @@ export const MATERIALS = {
   name: "material",
   options: [
     {
-      label: "Silicon",
-      value: "silicon",
+      label: "Silicone",
+      value: "silicone",
       description: undefined,
       price: PRODUCT_PRICES.material.silicon,
     },
