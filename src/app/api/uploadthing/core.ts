@@ -19,7 +19,7 @@ export const ourFileRouter = {
       const imageMetadata = await sharp(buffer).metadata();
       const { width, height } = imageMetadata;
       if (!configId) {
-        const configuration = await db.confifuration.create({
+        const configuration = await db.configuration.create({
           data: {
             imgUrl: file.url,
             height: height || 500,
@@ -28,7 +28,7 @@ export const ourFileRouter = {
         });
         return { configId: configuration.id };
       } else {
-        const updatedConfiguration = await db.confifuration.update({
+        const updatedConfiguration = await db.configuration.update({
           where: { id: configId },
           data: { croppedImgUrl: file.url },
         });

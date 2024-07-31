@@ -51,7 +51,7 @@ function DesignConfigurator({
   });
   const { toast } = useToast();
   const { push } = useRouter();
-  const { mutate: saveConfig } = useMutation({
+  const { mutate: saveConfig, isPending: isLoading } = useMutation({
     mutationKey: ["save-config"],
     mutationFn: async (args: SaveConfigArgs) => {
       await Promise.all([saveConfiguration(), _saveConfig(args)]);
@@ -374,6 +374,9 @@ function DesignConfigurator({
                 )}
               </p>
               <Button
+                isLoading={isLoading}
+                loadingText="redirecting"
+                disabled={isLoading}
                 size="sm"
                 className="w-full"
                 onClick={() =>

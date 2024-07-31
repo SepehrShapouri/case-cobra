@@ -21,7 +21,7 @@ export async function saveConfig({
   model,
   configId,
 }: SaveConfigArgs) {
-  await db.confifuration.update({
+  await db.configuration.update({
     where: { id: configId },
     data: {
       color,
