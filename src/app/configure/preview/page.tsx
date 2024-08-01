@@ -16,7 +16,7 @@ async function page({ searchParams }: PageProps) {
   if (!configuration) {
     return notFound();
   }
-  return <DesignPreview configuration={configuration}/>;
+  return <DesignPreview configuration={configuration} />;
 }
 
 export default page;

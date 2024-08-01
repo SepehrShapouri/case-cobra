@@ -12,11 +12,15 @@ import Confetti from "react-dom-confetti";
 import { createCheckoutSession } from "./actions";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import LoginModal from "@/components/LoginModal";
 function DesignPreview({ configuration }: { configuration: Configuration }) {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const { push } = useRouter();
   const { toast } = useToast();
-  const [showConfetti, setShowConfetti] = useState(false);
-  const { mutate: checkout, isPending: isLoading } = useMutation({
+  const { user } = useKindeBrowserClient();
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  const { mutate: createPaymentSession, isPending: isLoading } = useMutation({
     mutationKey: ["get-checkout-session"],
     mutationFn: createCheckoutSession,
     onSuccess: ({ url }) => {
@@ -51,6 +55,14 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
   if (finish === "textured") {
     totalPrice += PRODUCT_PRICES.finish.textured;
   }
+  function handleCheckout() {
+    if (user) {
+      createPaymentSession({ configId: configuration.id });
+    } else {
+      localStorage.setItem("configurationId", configuration.id);
+      setIsLoginModalOpen(true);
+    }
+  }
   return (
     <>
       <div
@@ -62,7 +74,7 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
           config={{ elementCount: 200, spread: 90 }}
         />
       </div>
-
+      <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
       <div className="mt-20 grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
         <div className="sm:col-span-4 md:col-span-3 md:row-span-2 md:row-end-2">
           <Phone
@@ -137,9 +149,9 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
 
             <div className="mt-8 flex justify-end pb-12">
               <Button
-              disabled={isLoading}
+                disabled={isLoading}
                 className="px-4 sm:px-6 lg:px-8"
-                onClick={()=>checkout({configId:configuration.id})}
+                onClick={() => handleCheckout()}
                 isLoading={isLoading}
                 loadingText="redirecting"
               >
