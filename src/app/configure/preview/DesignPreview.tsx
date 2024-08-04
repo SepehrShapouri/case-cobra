@@ -18,7 +18,8 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const { push } = useRouter();
   const { toast } = useToast();
-  const { user } = useKindeBrowserClient();
+  const user = null
+  console.log(user)
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const { mutate: createPaymentSession, isPending: isLoading } = useMutation({
     mutationKey: ["get-checkout-session"],

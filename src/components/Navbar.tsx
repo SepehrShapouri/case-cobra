@@ -1,15 +1,21 @@
+
 import React from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { ArrowRight } from "lucide-react";
+import { User } from "lucia";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { lucia } from "@/auth";
+import { getUser } from "@/lib/user";
+import { logout } from "@/app/(auth)/actions";
+import LogoutButton from "./LogoutButton";
 
-async function  Navbar() {
-  const {getUser} = getKindeServerSession()
-  const user = await getUser()
-  const isAdmin = user?.email === process.env.ADMIN_EMAIL;
+async function Navbar() {
+  const user = await getUser();
+  const isAdmin =
+    user?.email?.toLowerCase() == process.env.ADMIN_EMAIL?.toLowerCase();
   return (
     <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
@@ -20,12 +26,7 @@ async function  Navbar() {
           <div className="h-full flex items-center space-x-4">
             {user ? (
               <>
-                <Link
-                  href="/api/auth/logout"
-                  className={buttonVariants({ size: "sm", variant: "ghost" })}
-                >
-                  Sign out
-                </Link>
+              <LogoutButton/>
                 {isAdmin ? (
                   <Link
                     href="/dashboard"

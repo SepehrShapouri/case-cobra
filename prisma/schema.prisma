@@ -65,11 +65,22 @@ model Configuration {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String
-  order     Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  email         String
+  username      String?    @unique
+  password_hash String
+  order         Order[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?  @updatedAt
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Order {
@@ -80,7 +91,7 @@ model Order {
   userId          String
   amount          Float
   isPaid          Boolean       @default(false)
-  status          OrderStatus @default(awaiting_shimpent)
+  status          OrderStatus   @default(awaiting_shimpent)
 
   shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId String?

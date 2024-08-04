@@ -6,7 +6,10 @@ const nextConfig = {
       typescript:{
         ignoreBuildErrors:true
       },
-      images:{domains:['utfs.io']}
+      images:{domains:['utfs.io']},
+      experimental:{
+        serverComponentsExternalPackages:['@node-rs/argon2']
+      }
 };
 
 export default nextConfig;
