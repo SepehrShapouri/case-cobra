@@ -14,11 +14,22 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import LoginModal from "@/components/LoginModal";
+import { validateRequest } from "@/lib/validate-request";
+import { User } from "lucia";
 function DesignPreview({ configuration }: { configuration: Configuration }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const { push } = useRouter();
   const { toast } = useToast();
-  const user = null
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { user } = await validateRequest();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
   console.log(user)
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const { mutate: createPaymentSession, isPending: isLoading } = useMutation({

@@ -2,10 +2,11 @@
 import { db } from "@/db";
 import { hash } from "@node-rs/argon2";
 import { cookies } from "next/headers";
-import { lucia, validateRequest } from "@/auth";
+import { lucia} from "@/auth";
 import { redirect } from "next/navigation";
 import { generateIdFromEntropySize } from "lucia";
 import { verify } from "@node-rs/argon2";
+import { validateRequest } from "@/lib/validate-request";
 interface ActionResult {
   error: string;
 }

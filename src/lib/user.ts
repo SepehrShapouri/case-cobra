@@ -1,7 +1,6 @@
-import { lucia, validateRequest } from "@/auth";
-import { User } from "@prisma/client";
+import { lucia } from "@/auth";
 import { cookies } from "next/headers";
-import { cache, useEffect, useState } from "react";
+import { cache } from "react";
 
 export const getUser = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
