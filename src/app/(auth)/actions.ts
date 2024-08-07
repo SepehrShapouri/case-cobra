@@ -10,7 +10,7 @@ import { validateRequest } from "@/lib/validate-request";
 interface ActionResult {
   error: string;
 }
-export async function signup(formData: FormData): Promise<ActionResult> {
+export async function signup(_:any,formData: FormData): Promise<ActionResult> {
   const username = formData.get("username");
   const email = formData.get("email")!;
   // username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
@@ -22,7 +22,7 @@ export async function signup(formData: FormData): Promise<ActionResult> {
     !/^[a-z0-9_-]+$/.test(username)
   ) {
     return {
-      error: "Invalid username",
+      error: "Choose a different username!",
     };
   }
   const password = formData.get("password");
@@ -32,12 +32,12 @@ export async function signup(formData: FormData): Promise<ActionResult> {
     password.length > 255
   ) {
     return {
-      error: "Invalid password",
+      error: "Your password doesnt match our criticia",
     };
   }
   if (typeof email !== "string") {
     return {
-      error: "Invalid email",
+      error: "Email address should be a string of letters",
     };
   }
   const passwordHash = await hash(password, {
@@ -70,7 +70,7 @@ export async function signup(formData: FormData): Promise<ActionResult> {
   return redirect("/");
 }
 
-export async function login(formData: FormData): Promise<ActionResult> {
+export async function login(_:any,formData: FormData): Promise<ActionResult> {
   console.log("begin login");
   const username = formData.get("username");
   const email = formData.get("email")!;
@@ -80,7 +80,6 @@ export async function login(formData: FormData): Promise<ActionResult> {
     username.length > 31 ||
     !/^[a-z0-9_-]+$/.test(username)
   ) {
-    console.log("no username");
     return {
       error: "Invalid username",
     };
@@ -103,7 +102,6 @@ export async function login(formData: FormData): Promise<ActionResult> {
     },
   });
   if (!existingUser) {
-    console.log("no user");
     // NOTE:
     // Returning immediately allows malicious actors to figure out valid usernames from response times,
     // allowing them to only focus on guessing passwords in brute-force attacks.

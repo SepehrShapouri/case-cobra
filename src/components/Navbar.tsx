@@ -49,14 +49,14 @@ async function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/api/auth/register"
+                  href="/signup"
                   className={buttonVariants({ size: "sm", variant: "ghost" })}
                 >
                   Sign up
                 </Link>
 
                 <Link
-                  href="/api/auth/login"
+                  href="/login"
                   className={buttonVariants({ size: "sm", variant: "ghost" })}
                 >
                   Login
