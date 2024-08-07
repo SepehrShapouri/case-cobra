@@ -20,7 +20,7 @@ function LoginModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="absolute z-[99999999999999]">
+      <DialogContent className=" z-[99999999999999]">
         <DialogHeader>
           <div className="relative mx-auto w-24 h-24 mb-2">
             <Image
@@ -41,10 +41,16 @@ function LoginModal({
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-6 divide-x divide-gray-200">
-          <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+          <Link
+            href="/login"
+            className={buttonVariants({ variant: "outline" })}
+          >
             Login
           </Link>
-          <Link href="/signup" className={buttonVariants({ variant: "default" })}>
+          <Link
+            href="/signup"
+            className={buttonVariants({ variant: "default" })}
+          >
             Sign up
           </Link>
         </div>
