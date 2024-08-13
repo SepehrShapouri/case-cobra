@@ -67,7 +67,7 @@ export async function signup(_:any,formData: FormData): Promise<ActionResult> {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/");
+  return redirect("/auth-callback");
 }
 
 export async function login(_:any,formData: FormData): Promise<ActionResult> {
@@ -135,7 +135,7 @@ export async function login(_:any,formData: FormData): Promise<ActionResult> {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/");
+  return redirect("/auth-callback");
 }
 
 export async function logout(): Promise<ActionResult> {
