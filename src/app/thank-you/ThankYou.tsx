@@ -5,6 +5,7 @@ import { getPaymentStatus } from "./actions";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import PhonePreview from "@/components/PhonePreview";
+import { fromatPrice } from "@/lib/utils";
 
 function ThankYou() {
   const searchParams = useSearchParams();
@@ -75,6 +76,60 @@ function ThankYou() {
             croppedImageUrl={configuration!.croppedImgUrl!}
             color={color!}
           />
+        </div>
+        <div>
+          <div className="grid grid-cols-2 gap-x-6 py-10 text-sm">
+            <div>
+              <p className="font-medium text-gray-900">Shipping address</p>
+              <div className="mt-2 text-zinc-700">
+                <address className="not-italic">
+                  <span className="block">{shippingAddress?.name}</span>
+                  <span className="block">{shippingAddress?.street}</span>
+                  <span className="block">
+                    {shippingAddress?.postalCode} {shippingAddress?.city}
+                  </span>
+                </address>
+              </div>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">Billing address</p>
+              <div className="mt-2 text-zinc-700">
+                <address className="not-italic">
+                  <span className="block">{billingAddress?.name}</span>
+                  <span className="block">{billingAddress?.street}</span>
+                  <span className="block">
+                    {billingAddress?.postalCode} {billingAddress?.city}
+                  </span>
+                </address>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-x-6 border-t border-zinc-200 py-10 text-sm">
+            <div>
+              <p className="font-medium text-zinc-900">Payment status</p>
+              <p className="mt-2 text-zinc-700">Paid</p>
+            </div>
+            <div>
+              <p className="font-medium text-zinc-900">Shipping method</p>
+              <p className="mt-2 text-zinc-700">
+                DHL, takes up to 3 business days.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-6 border-t border-zinc-200 pt-10 text-sm">
+          <div className="flex justify-between">
+            <p className="font-medium text-zinc-900">Subtotal</p>
+            <p className="font-medium text-zinc-700">{fromatPrice(amount)}</p>
+          </div>
+          <div className="flex justify-between">
+            <p className="font-medium text-zinc-900">Shipping</p>
+            <p className="font-medium text-zinc-700">{fromatPrice(0)}</p>
+          </div>
+          <div className="flex justify-between">
+            <p className="font-medium text-zinc-900">Total</p>
+            <p className="font-medium text-zinc-700">{fromatPrice(amount)}</p>
+          </div>
         </div>
       </div>
     </div>
