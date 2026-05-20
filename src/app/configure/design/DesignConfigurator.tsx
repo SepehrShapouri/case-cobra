@@ -123,7 +123,10 @@ function DesignConfigurator({
       const blob = base64ToBlob(base64Data, "image/png");
       const file = new File([blob], "filename.png", { type: "image/png" });
 
-      await startUpload([file], { configId });
+      const uploadResult = await startUpload([file], { configId });
+      if (!uploadResult?.[0]?.serverData?.configId) {
+        throw new Error("Upload did not return a configuration.");
+      }
     } catch (err) {
       toast({
         title: "Something went wrong",

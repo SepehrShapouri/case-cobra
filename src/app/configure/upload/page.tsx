@@ -3,11 +3,19 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
-import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
+import {
+  Image as ImageIcon,
+  Loader2,
+  MousePointerSquareDashed,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
-function page() {
+
+const MAX_IMAGE_UPLOAD_SIZE_MB = 16;
+const MAX_IMAGE_UPLOAD_SIZE = MAX_IMAGE_UPLOAD_SIZE_MB * 1024 * 1024;
+
+function UploadPage() {
   const [isDragOver, setIsDragOver] = useState<boolean>();
   const [isPending, startTransition] = useTransition();
 
@@ -18,8 +26,24 @@ function page() {
 
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: ([data]) => {
-      const configId = data.serverData.configId;
+      const configId = data?.serverData?.configId;
+      if (!configId) {
+        toast({
+          title: "Upload failed",
+          description: "The uploaded image did not return a configuration.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       startTransition(() => router.push(`/configure/design?id=${configId}`));
+    },
+    onUploadError(error) {
+      toast({
+        title: "Upload failed",
+        description: error.message,
+        variant: "destructive",
+      });
     },
     onUploadProgress(p) {
       setUploadProgress(p);
@@ -31,14 +55,19 @@ function page() {
     setIsDragOver(false);
 
     toast({
-      title: `${file.file.type} is not supported.`,
+      title:
+        file.errors[0]?.code === "file-too-large"
+          ? `Image must be ${MAX_IMAGE_UPLOAD_SIZE_MB}MB or smaller.`
+          : `${file.file.type} is not supported.`,
       description:
-        "Please make sure the file you are uploading is one of the following types (png, jpeg, jpg)",
+        file.errors[0]?.code === "file-too-large"
+          ? "Please choose a smaller image before uploading."
+          : "Please make sure the file you are uploading is one of the following types (png, jpeg, jpg)",
       variant: "destructive",
     });
   };
   const onDropAccepted = (acceptedFiles: File[]) => {
-    startUpload(acceptedFiles, { configId: undefined });
+    void startUpload(acceptedFiles, { configId: undefined });
 
     setIsDragOver(false);
   };
@@ -61,6 +90,9 @@ function page() {
             "image/jpeg": [".jpeg"],
             "image/jpg": [".jpg"],
           }}
+          maxFiles={1}
+          maxSize={MAX_IMAGE_UPLOAD_SIZE}
+          multiple={false}
           onDragEnter={() => setIsDragOver(true)}
           onDragLeave={() => setIsDragOver(false)}
         >
@@ -75,7 +107,7 @@ function page() {
               ) : isUploading || isPending ? (
                 <Loader2 className="animate-spin h-6 w-6 text-zinc-500 mb-2" />
               ) : (
-                <Image className="h-6 w-6 text-zinc-500 mb-2" />
+                <ImageIcon className="h-6 w-6 text-zinc-500 mb-2" />
               )}
               <div className="flex flex-col justify-center mb-2 text-sm text-zinc-500">
                 {isUploading ? (
@@ -113,4 +145,4 @@ function page() {
   );
 }
 
-export default page;
+export default UploadPage;
