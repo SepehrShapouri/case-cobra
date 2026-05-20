@@ -6,7 +6,20 @@ const nextConfig = {
       typescript:{
         ignoreBuildErrors:true
       },
-      images:{domains:['utfs.io']},
+      images: {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "utfs.io",
+            pathname: "/f/**",
+          },
+          {
+            protocol: "https",
+            hostname: "*.ufs.sh",
+            pathname: "/f/**",
+          },
+        ],
+      },
       experimental:{
         serverComponentsExternalPackages:['@node-rs/argon2']
       }
